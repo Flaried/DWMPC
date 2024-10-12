@@ -1,0 +1,41 @@
+--- dwm.c	2021-03-15 16:37:38.189939908 -0500
++++ dwm.c	2021-03-15 16:32:23.693639390 -0500
+@@ -719,10 +724,21 @@ drawbar(Monitor *m)
+ 		drw_text(drw, m->ww - tw, 0, tw, bh, 0, stext, 0);
+ 	}
+ 
++	for (i = 0; i < LENGTH(tags); i++)
++		masterclientontag[i] = NULL;
++
+ 	for (c = m->clients; c; c = c->next) {
+ 		occ |= c->tags == 255 ? 0 : c->tags;
+ 		if (c->isurgent)
+ 			urg |= c->tags;
++		for (i = 0; i < LENGTH(tags); i++)
++			if (!masterclientontag[i] && c->tags & (1<<i)) {
++				XClassHint ch = { NULL, NULL };
++				XGetClassHint(dpy, c->win, &ch);
++				masterclientontag[i] = ch.res_class;
++				if (lcaselbl)
++					masterclientontag[i][0] = tolower(masterclientontag[i][0]);
++			}
+ 	}
+ 	x = 0;
+ 	for (i = 0; i < LENGTH(tags); i++) {
+@@ -730,9 +746,14 @@ drawbar(Monitor *m)
+ 		if (!(occ & 1 << i || m->tagset[m->seltags] & 1 << i))
+ 		continue;
+ 
+-		w = TEXTW(tags[i]);
++		if (masterclientontag[i])
++			snprintf(tagdisp, 64, ptagf, tags[i], masterclientontag[i]);
++		else
++			snprintf(tagdisp, 64, etagf, tags[i]);
++		masterclientontag[i] = tagdisp;
++		tagw[i] = w = TEXTW(masterclientontag[i]);
+ 		drw_setscheme(drw, scheme[m->tagset[m->seltags] & 1 << i ? SchemeSel : SchemeNorm]);
+-		drw_text(drw, x, 0, w, bh, lrpad / 2, tags[i], urg & 1 << i);
++		drw_text(drw, x, 0, w, bh, lrpad / 2, masterclientontag[i], urg & 1 << i);
+ 		x += w;
+ 	}
+ 	w = blw = TEXTW(m->ltsymbol);
