@@ -63,16 +63,37 @@ static const char unknown_str[] = "n/a";
  * wifi_essid          WiFi ESSID                      interface name (wlan0)
  * wifi_perc           WiFi signal in percent          interface name (wlan0)
  */
+#include <stdio.h>
+#include <stdlib.h>
+static const char *gpu_usage(const char *arg) {
+    static char buf[256];
+    FILE *fp = popen("nvidia-smi --query-gpu=utilization.gpu --format=csv,noheader,nounits", "r");
+    if (fp != NULL) {
+        if (fgets(buf, sizeof(buf), fp) != NULL) {
+            // Remove the trailing newline character if present
+            size_t len = strlen(buf);
+            if (len > 0 && buf[len - 1] == '\n') {
+                buf[len - 1] = '\0';
+            }
+            fclose(fp);
+            return buf;
+        }
+        fclose(fp);
+    }
+    return "N/A";  // Return N/A if the command fails or NVIDIA GPU is not found
+}
+
 static const struct arg args[] = {
 	/* function format          argument */
 	{ datetime, "%s |",           		"%D %a %r" },
 	{ cpu_perc, " CPU: %s%%",		NULL},
 	{ ram_perc, " RAM: %s%%", 		NULL},
+	{ gpu_usage, " GPU: %s%% |", NULL },
 	{ temp, " temp: %s |",			"/sys/class/hwmon/hwmon1/temp1_input"},
 	{ uptime, " uptime: %s |",		NULL},
 	{ disk_free, " storage: %s",		"/"},
-	{ disk_total, "/%s",		"/"},
-	{ disk_perc, "(%s%)",		"/"},
+	/* { disk_total, "/%s",		"/"}, */
+	/* { disk_perc, "(%s%) |",		"/"}, */
 	//{ wifi_essid, " network: %s",		"eno1"},
 	//{ disk_free, disk_perc, disk_total, "| disk_usage: %d / %dGB (%d%% used) |", "/"},
 	//{ wifi_perc, "(%s)",			"eno1"},
