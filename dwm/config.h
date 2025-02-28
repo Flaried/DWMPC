@@ -65,8 +65,9 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 // Since Dmenu Priority adds a flag we add it to dmenucmd to run it everytime
-static const char dmenuhp[] = "firefox, wallpaper, roblox, spotify-launcher, screenshot, zen";
-static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4,"-hp" , dmenuhp, NULL};
+// NOTE: There cant be any spaces in dmenuhp or else it doesnt work
+static const char dmenuhp[] = "firefox,wallpaper,roblox,spotify-launcher,screenshot,zen";
+static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, "-hp", dmenuhp, NULL};
 static const char *termcmd[]  = { "st", NULL };
 static const char *browsercmd[] = { "zen", NULL };
 
