@@ -8,8 +8,10 @@ static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const double defaultopacity = 0.98;
 static const double inactiveopacity = 0.95;
-static const char *fonts[]          = { "Hack:size=10" };
-static const char dmenufont[]       = "Hack:size=10";
+// static const char *fonts[]          = { "Hack:size=10" };
+// static const char dmenufont[]       = "Hack:size=10";
+static const char *fonts[]          = { "Iosevka Comfy:size=10" };
+static const char dmenufont[]       = "Iosevka Comfy:size=10";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
@@ -66,10 +68,10 @@ static const Layout layouts[] = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 // Since Dmenu Priority adds a flag we add it to dmenucmd to run it everytime
 // NOTE: There cant be any spaces in dmenuhp or else it doesnt work
-static const char dmenuhp[] = "firefox,wallpaper,roblox,spotify-launcher,screenshot,zen";
+static const char dmenuhp[] = "firefox,wallpaper,roblox,spotify-launcher,screenshot,firefox,zen";
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, "-hp", dmenuhp, NULL};
 static const char *termcmd[]  = { "st", NULL };
-static const char *browsercmd[] = { "zen", NULL };
+static const char *browsercmd[] = { "firefox", NULL };
 
 
 static const Key keys[] = {
